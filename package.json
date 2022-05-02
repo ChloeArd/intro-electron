@@ -1,0 +1,16 @@
+{
+  "name": "intro-electron",
+  "version": "1.0.0",
+  "description": "",
+  "main": "electron-start.js",
+  "scripts": {
+    "electron": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^18.2.0"
+  }
+}
