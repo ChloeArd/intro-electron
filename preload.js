@@ -17,3 +17,6 @@ contextBridge.exposeInMainWorld("logger", {
     "error": logError,
     "success": logSuccess
 });
+
+
+contextBridge.exposeInMainWorld("ipcRenderer", ipcRenderer);

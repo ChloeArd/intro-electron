@@ -14,6 +14,7 @@
     "electron": "^18.2.0"
   },
   "dependencies": {
-    "@electron/remote": "^2.0.8"
+    "@electron/remote": "^2.0.8",
+    "node-fetch": "^2.6.7"
   }
 }

@@ -1,5 +1,6 @@
 const {app, BrowserWindow, ipcMain} = require("electron");
 const path = require("path");
+const fetch = require("node-fetch");
 
 // Create the Browser Window and load the main html entry point.
 const makeWindow = () => {
@@ -55,6 +56,11 @@ ipcMain.on("log", (event, arg) => {
         console.error("Une erreur inconnue a été reportée par un des Render process");
     }
 });
+
+ipcMain.handle("ajax-request", async (event, url) => {
+    const response = await fetch(url);
+    return response.json();
+})
 
 // Closing app if all windows are closed.
 app.on("window-all-closed", () => {
