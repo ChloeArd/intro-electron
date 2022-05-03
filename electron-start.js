@@ -1,10 +1,11 @@
-const {app, BrowserWindow, ipcMain} = require("electron");
+const {app, BrowserWindow, ipcMain, dialog} = require("electron");
 const path = require("path");
-const fetch = require("node-fetch");
 
 // Create the Browser Window and load the main html entry point.
+let mainWindow = null;
+
 const makeWindow = () => {
-    const win = new BrowserWindow({
+    mainWindow = new BrowserWindow({
         width: 1200,
         height: 600,
         center: true,
@@ -29,8 +30,8 @@ const makeWindow = () => {
         icon: path.resolve(__dirname + "/assets/icon.png"),
     });*/
 
-    win.webContents.openDevTools();
-    win.loadFile("src/index.html");
+    mainWindow.webContents.openDevTools();
+    mainWindow.loadFile("src/index.html");
     //childOne.loadFile("src/child1.html");
     //childTwo.loadURL("https://www.google.fr");
 }
@@ -50,17 +51,18 @@ ipcMain.on("log", (event, arg) => {
     if("type" in arg && "message" in arg) {
         console.table(arg);
         console.log("Type: " + arg.type + " => message: " + arg.message);
-        event.sender.send("main-process-event", "Message logged");
     }
     else {
         console.error("Une erreur inconnue a été reportée par un des Render process");
     }
 });
 
-ipcMain.handle("ajax-request", async (event, url) => {
+/*ipcMain.handle("ajax-request", async (event, url) => {
     const response = await fetch(url);
     return response.json();
-})
+})*/
+
+ipcMain.handle("showMessageBox", (event, arg) => dialog.showMessageBox(mainWindow, arg));
 
 // Closing app if all windows are closed.
 app.on("window-all-closed", () => {
