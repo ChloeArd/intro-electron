@@ -64,6 +64,13 @@ ipcMain.on("log", (event, arg) => {
 
 ipcMain.handle("showMessageBox", (event, arg) => dialog.showMessageBox(mainWindow, arg));
 
+// Error dialog
+ipcMain.handle("showErrorBox", (event, arg) => {
+    if ("title" in arg && "content" in arg) {
+        return dialog.showErrorBox(arg.title, arg.content);
+    }
+});
+
 // Closing app if all windows are closed.
 app.on("window-all-closed", () => {
     if (process.platform !== "darwin") {

@@ -11,3 +11,7 @@ document.getElementById("bouton-test").addEventListener("click", async () => {
         message: `Bouton choisi ${response.response}, la checkbox est-elle cliquée ?  ${response.checkboxChecked ? "Oui" : "Non"}`
     });
 });
+
+document.getElementById("bouton-error").addEventListener("click", async () => {
+    await window.dialog.showErrorBox("Une erreur est survenue", "C'est une erreur critique !");
+});

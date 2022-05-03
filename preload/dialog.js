@@ -20,19 +20,13 @@ contextBridge.exposeInMainWorld("dialog", {
         return ipcRenderer.invoke("showMessageBox", {...defaultCfg, ...config});
     },
 
-    showErrorBox: async config => {
-        const defaultCfg = {
-            title: "Erreur",
-            type: "Error"
-        };
-        return ipcRenderer.invoke("showMessageBox", {...defaultCfg, ...config});
-    },
-
     showInfoBox: async config => {
         const defaultCfg = {
             title: "Information",
             type: "info"
         };
         return ipcRenderer.invoke("showMessageBox", {...defaultCfg, ...config});
-    }
+    },
+
+    showErrorBox: async (title, content) => ipcRenderer.invoke("showErrorBox", {title, content})
 });
