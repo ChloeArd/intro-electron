@@ -17,10 +17,13 @@ document.getElementById("bouton-error").addEventListener("click", async () => {
 });
 
 const textarea = document.getElementById("text-content");
-window.file.read()
-    .then(content => textarea.value = content)
-;
 
 document.getElementById("save").addEventListener("click", function () {
     window.file.save(textarea.value);
 });
+
+document.getElementById("load").addEventListener("click", () => {
+    window.file.read()
+        .then(data => textarea.value = data)
+    ;
+})

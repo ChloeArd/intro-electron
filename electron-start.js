@@ -99,7 +99,7 @@ ipcMain.handle("save-file", async (event, content) => {
 });
 
 // Readin file
-ipcMain.handle("read-file", async (event) => {
+/*ipcMain.handle("read-file", async (event) => {
     //On compose le chemin vers le fichier
     const file = path.resolve(__dirname, "test.txt");
     // On teste que le fichier existe bien
@@ -119,7 +119,34 @@ ipcMain.handle("read-file", async (event) => {
         // Si le fichier n'existe pas, on le notifie à l'utilisateur
         dialog.showErrorBox("Erreur", "Impossible de lire le fichier, il n'existe pas !")
     }
-})
+})*/
+
+// Readin file
+ipcMain.handle("read-file", (event) => {
+    const result = dialog.showOpenDialogSync(mainWindow, {
+        title: "Choisissez un fichier",
+        defaultPath: path.resolve(__dirname),
+        buttonLabel: "Faites un choix",
+        properties: [
+            //"openDirectory", // ouvre que des dossier
+            "openFile", // ouvre que les fichiers
+            //"multiSelections", // permet la sélection multiple
+            //"showHiddenFiles" //affiche les fichiers masqués
+        ],
+        filters: [
+            {name: "Fichiers web", extensions: ["txt", "js", "css", "json"]}
+        ]
+    });
+    if (result) {
+        try {
+            const data = fs.readFileSync(result[0]);
+            return data.toString();
+        }
+        catch (err) {
+            dialog.showErrorBox("Erreur", "Impossible de lire le fichier");
+        }
+    }
+});
 
 // Closing app if all windows are closed.
 app.on("window-all-closed", () => {
