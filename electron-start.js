@@ -118,7 +118,6 @@ ipcMain.handle("save-file", async (event, content) => {
     //}
 });
 
-
 // Closing app if all windows are closed.
 app.on("window-all-closed", () => {
     if (process.platform !== "darwin") {
