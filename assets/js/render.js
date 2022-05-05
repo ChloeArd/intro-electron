@@ -15,3 +15,7 @@ document.getElementById("bouton-test").addEventListener("click", async () => {
 document.getElementById("bouton-error").addEventListener("click", async () => {
     await window.dialog.showErrorBox("Une erreur est survenue", "C'est une erreur critique !");
 });
+
+document.getElementById("save").addEventListener("click", function () {
+    window.file.save(document.getElementById("text-content").value);
+})

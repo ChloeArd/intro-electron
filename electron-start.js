@@ -1,5 +1,6 @@
 const {app, BrowserWindow, ipcMain, dialog} = require("electron");
 const path = require("path");
+const fs = require("fs");
 
 // Create the Browser Window and load the main html entry point.
 let mainWindow = null;
@@ -70,6 +71,53 @@ ipcMain.handle("showErrorBox", (event, arg) => {
         return dialog.showErrorBox(arg.title, arg.content);
     }
 });
+
+// Writing file
+ipcMain.handle("save-file", async (event, content) => {
+
+    dialog.showSaveDialog(mainWindow, {
+        title: "Choisissez une destination",
+        defaultPath: path.resolve(__dirname, "mon-fichier.txt")
+    })
+        .then(result => {
+            if (!result.canceled) {
+                try {
+                    fs.writeFileSync(result.filePath, content);
+                }
+                catch (err) {
+                    dialog.showErrorBox("Erreur", "Une erreur est survenue");
+                }
+            }
+        })
+        .catch(err => () => dialog.showErrorBox("Erreur", "Une erreur est survenue"));
+
+    // if (filename) {
+    //     const dest = path.resolve(__dirname, filename);
+    //     if (fs.existsSync(defau)) {
+    //         const choice = await dialog.showMessageBox(mainWindow, {
+    //             title: "Attention",
+    //             message: "Le fichier existe déjà, choisissez une action",
+    //             buttons: ["Annuler", "Ecraser", "Ajouter"],
+    //             cancelId: 0,
+    //             defaultId: 0
+    //         });
+    //
+    //         switch (choice.response) {
+    //             case 1:
+    //                 write("w+");
+    //                 break;
+    //             case 2:
+    //                 write("a+");
+    //                 break;
+    //             default:
+    //                 return;
+    //         }
+    //     } else {
+    //         write("w+");
+    //     }
+    //}
+});
+
 
 // Closing app if all windows are closed.
 app.on("window-all-closed", () => {
