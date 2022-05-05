@@ -26,4 +26,4 @@ document.getElementById("load").addEventListener("click", () => {
     window.file.read()
         .then(data => textarea.value = data)
     ;
-})
+});
