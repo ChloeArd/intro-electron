@@ -77,7 +77,12 @@ ipcMain.handle("save-file", async (event, content) => {
 
     dialog.showSaveDialog(mainWindow, {
         title: "Choisissez une destination",
-        defaultPath: path.resolve(__dirname, "mon-fichier.txt")
+        defaultPath: path.resolve(__dirname, "mon-fichier.txt"),
+        buttonLabel: "Valider le choix",
+        properties: [
+            "showHiddenFiles",
+            "showOverwriteConfirmation"
+        ]
     })
         .then(result => {
             if (!result.canceled) {
@@ -91,32 +96,30 @@ ipcMain.handle("save-file", async (event, content) => {
         })
         .catch(err => () => dialog.showErrorBox("Erreur", "Une erreur est survenue"));
 
-    // if (filename) {
-    //     const dest = path.resolve(__dirname, filename);
-    //     if (fs.existsSync(defau)) {
-    //         const choice = await dialog.showMessageBox(mainWindow, {
-    //             title: "Attention",
-    //             message: "Le fichier existe déjà, choisissez une action",
-    //             buttons: ["Annuler", "Ecraser", "Ajouter"],
-    //             cancelId: 0,
-    //             defaultId: 0
-    //         });
-    //
-    //         switch (choice.response) {
-    //             case 1:
-    //                 write("w+");
-    //                 break;
-    //             case 2:
-    //                 write("a+");
-    //                 break;
-    //             default:
-    //                 return;
-    //         }
-    //     } else {
-    //         write("w+");
-    //     }
-    //}
 });
+
+// Readin file
+ipcMain.handle("read-file", async (event) => {
+    //On compose le chemin vers le fichier
+    const file = path.resolve(__dirname, "test.txt");
+    // On teste que le fichier existe bien
+    if (fs.existsSync(file)) {
+        try {
+            // Si le fichier existe, on lit et on récupère un buffer
+            const data = fs.readFileSync(file);
+            // On retourne le contenu du buffer transformé en chaine de caractère (contenu du fichier)
+            return data.toString();
+        }
+        catch (err) {
+            // En cas d'erreur, on afficher une boîte de dialoguqe d'erreur
+            dialog.showErrorBox("Erreur", "Impossible de lire le fichier");
+        }
+    }
+    else {
+        // Si le fichier n'existe pas, on le notifie à l'utilisateur
+        dialog.showErrorBox("Erreur", "Impossible de lire le fichier, il n'existe pas !")
+    }
+})
 
 // Closing app if all windows are closed.
 app.on("window-all-closed", () => {
